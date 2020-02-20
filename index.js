@@ -1,9 +1,3 @@
-var memeArray = [
-    {"creatorName": "Alice","memeUrl": "https://pbs.twimg.com/media/Dsdt6gOXcAAksLu.jpg","votes":18, "index":1, "rank":1},
-    {"creatorName": "Bob","memeUrl": "https://pbs.twimg.com/media/C4Vu1S0WYAA3Clw.jpg","votes":27, "index":2, "rank":2},
-    {"creatorName": "Carol","memeUrl": "https://pbs.twimg.com/media/DeHbsSAU0AAbQAq.jpg","votes":14, "index":3, "rank":3}
-  ];
-
 
 const contractSource = `
   payable contract MemeVote =
