@@ -34,17 +34,33 @@ var client = null;
 var memeArray = [];
 var memesLength = 0;
 
+
+async function callStatic(func, args)
+{
+  const contract = await client.getContractInstance(contractSource, {contractAddress});
+  const calledGet = await contract.call(func, args, {callStatic: true}).catch(e => console.error(e));
+  console.log('calledGet', calledGet);
+
+  const decodedGet = await calledGet.decode().catch(e => console.error(e));
+  console.log('decodedGet', decodedGet);
+  return decodedGet
+}
 window.addEventListener('load', async () => {
   $("#loader").show();
 
   client = await Ae.Aepp();
 
-  const contract = await client.getContractInstance(contractSource, {contractAddress});
-  const calledGet = await contract.call('getMemesLength', [], {callStatic: true}).catch(e => console.error(e));
-  console.log('calledGet', calledGet);
+  memesLength = await callStatic("getMemesLength", []);
 
-  const decodedGet = await calledGet.decode().catch(e => console.error(e));
-  console.log('decodedGet', decodedGet);
+    for (var i = 1; i <= memesLength; i++) {
+      meme = await callStatic("getMeme", [i]);
+      memeArray.push({
+        creatorName: meme.name,
+        memeUrl: meme.url,
+        index: i,
+        votes: meme.voteCount
+      })
+    }
 
   renderMemes();
 
