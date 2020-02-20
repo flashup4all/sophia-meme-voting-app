@@ -30,7 +30,7 @@ const contractSource = `
       let updatedMemes = state.memes{ [index].voteCount = updatedVoteCount }
       put(state{ memes = updatedMemes })
 `;
-const contractAddress ='ct_2MDUxZkKY32QTbEfR5QAvzZDVKkmaq1yL7snHMaSXsrbNrKxcD';
+const contractAddress ='ct_4Az3XHUbSSvBUBCEsgL29YmwdPWp2CA1pjBg3Bp4sWzFyt8xH';
 var client = null; 
 var memeArray = [];
 var memesLength = 0;
@@ -87,9 +87,10 @@ jQuery("#memeBody").on("click", ".voteBtn", async function(event){
   $("#loader").show();
   const value = $(this).siblings('input').val();
   const dataIndex = event.target.id;
+  await contractCall('voteMeme', [dataIndex], value)
+
   const foundIndex = memeArray.findIndex(meme => meme.index == dataIndex);
 
-  await contractCall('voteMeme', [dataIndex], value)
 
   memeArray[foundIndex].votes += parseInt(value, 10);
   renderMemes();
@@ -101,14 +102,15 @@ $('#registerBtn').click(async function(){
   $("#loader").show();
   var name = ($('#regName').val()),
       url = ($('#regUrl').val());
+      
     await contractCall('registerMeme',[ url, name], 0)
 
-  memeArray.push({
-    creatorName: name,
-    memeUrl: url,
-    index: memeArray.length+1,
-    votes: 0
-  })
+  // memeArray.push({
+  //   creatorName: name,
+  //   memeUrl: url,
+  //   index: memeArray.length+1,
+  //   votes: 0
+  // })
   renderMemes();
   $("#loader").hide();
 
